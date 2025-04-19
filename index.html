@@ -333,7 +333,6 @@
     let activeHighlight = null;
     let pollingDistrictLayers = {};
     let pollingDistrictProperties = {};
-    let pollingDistrictMap = {}; // Map of polling district names to their GeoJSON features
     let selectedDistrictForLines = null;
     let showElectorCount = true; // Always show elector count
 
@@ -494,40 +493,9 @@
                 return L.marker(latlng);
             },
             onEachFeature: function(feature, layer) {
-                // Calculate centroid appropriately for feature type
+                // Calculate center of mass using turf.js
                 if (feature && feature.geometry) {
-                    if (!isPollingDistrict && feature.properties && feature.properties.polling_districts) {
-                        // For constituencies: use center of mass of polling districts' centers of mass
-                        const pollingDistricts = feature.properties.polling_districts;
-                        const pdCentroids = [];
-                        
-                        // Get center of mass for each polling district
-                        pollingDistricts.forEach(pdName => {
-                            const pdFeature = pollingDistrictMap[pdName];
-                            if (pdFeature && pdFeature.geometry) {
-                                // Calculate center of mass for this polling district
-                                const pdCentroid = turf.centerOfMass(pdFeature);
-                                if (pdCentroid) {
-                                    pdCentroids.push(pdCentroid);
-                                }
-                            }
-                        });
-                        
-                        // If we found centroids, calculate the center of those points
-                        if (pdCentroids.length > 0) {
-                            // Create a feature collection of polling district centroids
-                            const featureCollection = {
-                                type: "FeatureCollection",
-                                features: pdCentroids
-                            };
-                            
-                            // Use center as the constituency centroid
-                            feature.properties.centroid = turf.center(featureCollection);
-                        }
-                    } else {
-                        // For polling districts, use regular center of mass
-                        feature.properties.centroid = turf.centerOfMass(feature);
-                    }
+                    feature.properties.centroid = turf.centerOfMass(feature);
                 }
                 
                 let labelText = ''; // Label for high zoom
@@ -859,7 +827,7 @@
     async function constructConstituencyBoundaries(pollingGeoJSON, assignments) {
         
         // Create a mapping of polling district codes to their GeoJSON features
-        pollingDistrictMap = {}; // Update global pollingDistrictMap
+        const pollingDistrictMap = {};
         pollingGeoJSON.features.forEach(feature => {
             const pdName = feature.properties.name || feature.properties.Name || feature.properties.polling_district;
             if (pdName) {
