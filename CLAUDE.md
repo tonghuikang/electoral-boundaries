@@ -8,3 +8,5 @@ You are NOT allowed to git add or git commit, unless specifically instructed
 When resolving mistake, do NOT create a special case just to fix the mistake
 Do NOT put code in try except
 Do NOT write fallbacks unless asked to.
+
+Do NOT change the word nonenclavity
