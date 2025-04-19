@@ -489,7 +489,15 @@
                     interactive: true // Ensure the layer is clickable
                 };
             },
+            pointToLayer: function(feature, latlng) {
+                return L.marker(latlng);
+            },
             onEachFeature: function(feature, layer) {
+                // Calculate center of mass using turf.js
+                if (feature && feature.geometry) {
+                    feature.properties.centroid = turf.centerOfMass(feature);
+                }
+                
                 let labelText = ''; // Label for high zoom
                 let popupContent = ''; // Content for click popup
                 let tooltipContent = ''; // Content for hover tooltip (non-polling)
@@ -581,9 +589,9 @@
                     }
 
                     // Add high-zoom label marker at center of mass
-                    if (labelText && layer.feature && layer.feature.geometry) {
-                        // Calculate center of mass using turf.js
-                        const centroid = turf.centerOfMass(layer.feature);
+                    if (labelText && props.centroid) {
+                        // Use the pre-calculated centroid from feature properties
+                        const centroid = props.centroid;
                         // Convert turf point [lng, lat] to Leaflet [lat, lng]
                         const center = L.latLng(centroid.geometry.coordinates[1], centroid.geometry.coordinates[0]);
                         
@@ -623,9 +631,9 @@
                         });
                         
                             // Add label at center of mass for constituency
-                            if (layer.feature && layer.feature.geometry) {
-                                // Calculate center of mass using turf.js
-                                const centroid = turf.centerOfMass(layer.feature);
+                            if (props.centroid) {
+                                // Use the pre-calculated centroid from feature properties
+                                const centroid = props.centroid;
                                 // Convert turf point [lng, lat] to Leaflet [lat, lng]
                                 const center = L.latLng(centroid.geometry.coordinates[1], centroid.geometry.coordinates[0]);
                                 
@@ -676,8 +684,12 @@
                                 return;
                             }
 
-                            // Calculate center of mass of district A using turf.js
-                            const centroidA = turf.centerOfMass(layerA.feature);
+                            // Use the pre-calculated centroid from feature properties
+                            const centroidA = propsA.centroid;
+                            if (!centroidA) {
+                                console.error(`Missing centroid for district: ${pdName}`);
+                                return;
+                            }
                             // Convert turf point [lng, lat] to Leaflet [lat, lng]
                             const centerA = L.latLng(centroidA.geometry.coordinates[1], centroidA.geometry.coordinates[0]);
                             const directAdjacentNames = propsA.adjacent_districts || [];
@@ -687,9 +699,9 @@
                                 const layerB = pollingDistrictLayers[nameB];
                                 const propsB = pollingDistrictProperties[nameB];
 
-                                if (layerB && layerB.feature && propsB) {
-                                    // Calculate center of mass of district B
-                                    const centroidB = turf.centerOfMass(layerB.feature);
+                                if (layerB && propsB && propsB.centroid) {
+                                    // Use the pre-calculated centroid from feature properties
+                                    const centroidB = propsB.centroid;
                                     // Convert turf point [lng, lat] to Leaflet [lat, lng]
                                     const centerB = L.latLng(centroidB.geometry.coordinates[1], centroidB.geometry.coordinates[0]);
                                     
@@ -703,9 +715,10 @@
                                         if (nameC === pdName) { return; } // Skip B->A line
 
                                         const layerC = pollingDistrictLayers[nameC];
-                                        if (layerC && layerC.feature) {
-                                            // Calculate center of mass of district C
-                                            const centroidC = turf.centerOfMass(layerC.feature);
+                                        const propsC = pollingDistrictProperties[nameC];
+                                        if (layerC && propsC && propsC.centroid) {
+                                            // Use the pre-calculated centroid from feature properties
+                                            const centroidC = propsC.centroid;
                                             // Convert turf point [lng, lat] to Leaflet [lat, lng]
                                             const centerC = L.latLng(centroidC.geometry.coordinates[1], centroidC.geometry.coordinates[0]);
                                             
@@ -713,11 +726,11 @@
                                                 color: 'green', weight: 2, opacity: 0.7, dashArray: '2, 4', className: 'adjacency-line'
                                             }).addTo(adjacencyLinesLayer);
                                         } else {
-                                            console.warn(`      Could not find layer/feature for indirect adjacent (C): ${nameC}`);
+                                            console.warn(`      Could not find layer/props/centroid for indirect adjacent (C): ${nameC}`);
                                         }
                                     });
                                 } else {
-                                    console.warn(`  Could not find layer/feature/props for direct adjacent (B): ${nameB}`);
+                                    console.warn(`  Could not find layer/props/centroid for direct adjacent (B): ${nameB}`);
                                 }
                             });
                         }
