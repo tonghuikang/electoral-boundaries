@@ -9,7 +9,7 @@ from scripts.score_assignments import score_assignment, validate_assignment, loa
 
 assignment_data = load_json("assignments/official_ge_2025.json")
 assignments = assignment_data["assignment"]
-assignment_data["assignment_name"] = "With local optimization"
+assignment_data["assignment_name"] = "local_swap"
 assignment_filename = "local_swap.json"
 assignment_filepath = os.path.join("assignments", assignment_filename)
 

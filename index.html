@@ -210,7 +210,7 @@
     </div>
     <div>
       <input type="checkbox" id="local-optimization-toggle">
-      <label for="local-optimization-toggle">Show Local Optimization</label>
+      <label for="local-optimization-toggle">Show Algorithmically Optimized</label>
     </div>
     <div>
       <input type="checkbox" id="polling-toggle">
@@ -1231,16 +1231,16 @@
                 }
             }
             
-            // Fetch Local Optimization with fallback
+            // Fetch Algorithmically Optimized with fallback
             try {
                 const response = await fetch(localOptimizationUrl);
-                if (!response.ok) throw new Error(`HTTP status ${response.status} for local optimization`);
+                if (!response.ok) throw new Error(`HTTP status ${response.status} for Algorithmically Optimized`);
                 localOptimizationData = await response.json();
-                statusElement.innerHTML = "Loaded local optimization data...";
+                statusElement.innerHTML = "Loaded Algorithmically Optimized data...";
                 optimizationSource = 'local';
             } catch (localError) {
-                console.error(`Failed to load local optimization: ${localError.message}`);
-                statusElement.innerHTML = "Local optimization not available, trying GitHub...";
+                console.error(`Failed to load Algorithmically Optimized: ${localError.message}`);
+                statusElement.innerHTML = "Algorithmically Optimized not available, trying GitHub...";
                 
                 try {
                     const githubResponse = await fetch(githubOptimizationUrl);
@@ -1263,13 +1263,13 @@
                 statusElement.textContent += " Failed to construct constituency boundaries.";
             }
             
-            // Construct Local Optimization Boundaries
+            // Construct Algorithmically Optimized Boundaries
             if (localOptimizationData && pollingGeoJSON) {
-                statusElement.textContent = "Constructing local optimization boundaries...";
+                statusElement.textContent = "Constructing Algorithmically Optimized boundaries...";
                 localOptimizationGeoJSON = await constructConstituencyBoundaries(pollingGeoJSON, localOptimizationData);
             } else {
-                console.error("Missing data needed to construct local optimization boundaries");
-                statusElement.textContent += " Failed to construct local optimization boundaries.";
+                console.error("Missing data needed to construct Algorithmically Optimized boundaries");
+                statusElement.textContent += " Failed to construct Algorithmically Optimized boundaries.";
             }
 
             // Parse
@@ -1282,7 +1282,7 @@
             if (localOptimizationGeoJSON) {
                 parseGeoJSON(localOptimizationGeoJSON, localOptimizationLayer, '#0066FF', false); // Blue outline, has tooltip
                 if (localOptimizationLayer.getBounds().isValid()) bounds.extend(localOptimizationLayer.getBounds());
-            } else { statusElement.textContent += " Failed to load local optimization data."; }
+            } else { statusElement.textContent += " Failed to load Algorithmically Optimized data."; }
 
             if (pollingGeoJSON) {
                 parseGeoJSON(pollingGeoJSON, pollingLayer, '#FF0000', true); // Red outline, has popup
@@ -1343,7 +1343,7 @@
                     .catch(error => console.error("Error updating score:", error));
             }
             
-            // Uncheck local optimization toggle when constituency toggle is checked
+            // Uncheck Algorithmically Optimized toggle when constituency toggle is checked
             if (document.getElementById('local-optimization-toggle').checked) {
                 document.getElementById('local-optimization-toggle').checked = false;
                 map.removeLayer(localOptimizationLayer);
@@ -1385,7 +1385,7 @@
                     .catch(error => console.error("Error updating score:", error));
             }
             
-            // Uncheck constituency toggle when local optimization toggle is checked
+            // Uncheck constituency toggle when Algorithmically Optimized toggle is checked
             if (document.getElementById('constituency-toggle').checked) {
                 document.getElementById('constituency-toggle').checked = false;
                 map.removeLayer(constituencyLayer);

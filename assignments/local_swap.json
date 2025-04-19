@@ -1,5 +1,5 @@
 {
-  "assignment_name": "With local optimization",
+  "assignment_name": "local_swap",
   "assignment": [
     {"constituency_name": "Buangkok", "member_size": 5, "polling_districts": ["AM16", "AM17", "AM18", "AM19", "AM20", "AM43", "AM44", "AM63", "AM49", "AM21", "AM29", "AJ36", "AJ37", "AM42", "AM32", "AM13", "AM12", "AM14", "AM46", "AM50", "AM48", "SK40", "SK41", "AM15", "SK38", "AM61", "AM62", "AM11", "AM22", "AM28", "AM23", "AM27", "AM31", "AJ38", "AM51", "AM64", "AM45", "AM41", "AM38", "AM34", "AM30", "AM39", "AJ35", "AM33", "AJ34", "AM57", "AM56", "AM26"]},
     {"constituency_name": "Boon Lay", "member_size": 5, "polling_districts": ["JR26", "JR27", "WE28", "WE37", "WE19", "WE18", "PI06", "PI07", "JR24", "JR28", "JR25", "JR29", "JR23", "JR30", "WE29", "WE25", "WE26", "WE24", "WE17", "WE13", "WE16", "WE14", "WE35", "JR33", "WE21", "WE22", "WE23", "WE34", "WE30", "WE36", "JR31", "YH02", "JR47", "JR32", "WE39", "WE33", "WE38", "JR13", "WE15", "WE04", "WE27", "WE05", "WE02", "WE07", "WE20", "PI08", "WE06", "PI05", "WE12"]},
