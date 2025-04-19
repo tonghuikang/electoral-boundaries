@@ -14,7 +14,7 @@ You can interact with the electoral boundaries here: https://tonghuikang.github.
 Each constituency is made up of multiple polling districts.
 
 Instead of drawing polling districts and electoral boundaries from scratch, I assume that the polling districts are predetermined.
-I used the polling district coordinates collected by [Yudhishthra Nathan and Goh Tiong Ann](https://www.facebook.com/yudhishthra/posts/pfbid02SgcvubpES3Rh7ht32qjCc4KCUCMRbwe5ozvpBu6kx2uUHioQy4HtYd6bBhevhjLKl), and I have made numerous improvements.
+I used the polling district coordinates collected by [Yudhishthra Nathan and Goh Tiong Ann](https://www.linkedin.com/posts/yudhishthra-nathan-5a2b3816b_ge2025-electoral-map-15th-parliament-of-activity-7317831656130670592-USiD/), and I have made numerous improvements.
 The elector size of each polling district is estimated, because I do not have the official counts.
 
 We will also be constrained to keeping the same distribution of member sizes (15 SMCs, 8 4-MP GRCs, 10 5-MP GRCs).
@@ -23,7 +23,7 @@ The task is now reduced to grouping these polling districts - each group is a co
 Each constituency should have a member size, a name, and the set of polling districts that it comprises.
 
 
-# Measuring the Quality of Polling District Assignments
+# Measuring how Well Polling Districts are Assigned
 
 For each constituency, we can measure quality based on:
 
