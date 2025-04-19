@@ -10,9 +10,9 @@ def load_annotations():
 
 def format_percentage(value):
     if value == 1:
-        return "100%"
+        return "100"
     else:
-        return f"{value*100:.2f}%"
+        return f"{value*100:.2f}"
 
 def print_table(annotations):
     # Sort by constituency score (descending)
