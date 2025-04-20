@@ -336,7 +336,7 @@ def score_assignment(assignment_data: Dict[str, Any]) -> Dict[str, Any]:
     overall_score = sum(result["constituency_score"] * result["member_size"] for result in results) / full_member_size
     overall_score = min(overall_score, min(result["elector_balance"] for result in results))
 
-    return {"annotations": results, "overall_score": overall_score}
+    return {"scores": results, "overall_score": overall_score}
 
 
 def validate_assignment(assignment_data: Dict[str, Any]) -> tuple[bool, Dict]:
@@ -416,7 +416,7 @@ def validate_assignment(assignment_data: Dict[str, Any]) -> tuple[bool, Dict]:
 
 def score_assignment_file(assignment_file):
     input_path = os.path.join("assignments", assignment_file)
-    output_path = os.path.join("annotations", assignment_file)
+    output_path = os.path.join("scores", assignment_file)
 
     print(f"Processing {assignment_file}...")
 
@@ -433,7 +433,7 @@ def score_assignment_file(assignment_file):
 
     # Save results
     save_json(results, output_path, noindent=False)
-    print(f"Annotations saved to {output_path}")
+    print(f"scores saved to {output_path}")
 
 
 def main() -> None:

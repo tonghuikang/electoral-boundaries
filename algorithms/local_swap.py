@@ -52,8 +52,8 @@ for iteration in range(10):
             print("Current score", score)
 
     elector_balance_and_assignment_idx = []
-    for assignment_idx, annotation in enumerate(score_assignment(assignment_data)["annotations"]):
-        elector_balance_and_assignment_idx.append((annotation["elector_balance"], assignment_idx))
+    for assignment_idx, score_data in enumerate(score_assignment(assignment_data)["scores"]):
+        elector_balance_and_assignment_idx.append((score_data["elector_balance"], assignment_idx))
     elector_balance_and_assignment_idx.sort()
 
     early_termination = elector_balance_and_assignment_idx[0][0] == score_assignment(assignment_data)["overall_score"]

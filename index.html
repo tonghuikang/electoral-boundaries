@@ -1059,28 +1059,28 @@
     let localSwapStatistics = {};
     let currentStatistics = {};
     
-    // Function to preload all statistics from annotations files
+    // Function to preload all statistics from scores files
     async function preloadConstituencyStatistics() {
         try {
             // Load official statistics
-            let response = await fetch('annotations/official_ge_2025.json');
+            let response = await fetch('scores/official_ge_2025.json');
             if (!response.ok) {
                 throw new Error(`HTTP status ${response.status}`);
             }
             
             const officialData = await response.json();
-            officialData.annotations.forEach(constituency => {
+            officialData.scores.forEach(constituency => {
                 officialStatistics[constituency.constituency_name] = constituency;
             });
             
             // Load local swap statistics
-            response = await fetch('annotations/local_swap.json');
+            response = await fetch('scores/local_swap.json');
             if (!response.ok) {
                 throw new Error(`HTTP status ${response.status}`);
             }
             
             const localSwapData = await response.json();
-            localSwapData.annotations.forEach(constituency => {
+            localSwapData.scores.forEach(constituency => {
                 localSwapStatistics[constituency.constituency_name] = constituency;
             });
             
@@ -1346,7 +1346,7 @@
             // Update overall score in legend
             const scoreElement = document.getElementById('overall-score-value');
             if (scoreElement) {
-                fetch('annotations/official_ge_2025.json')
+                fetch('scores/official_ge_2025.json')
                     .then(response => response.json())
                     .then(data => {
                         if (data.overall_score !== undefined) {
@@ -1388,7 +1388,7 @@
             // Update overall score in legend
             const scoreElement = document.getElementById('overall-score-value');
             if (scoreElement) {
-                fetch('annotations/local_swap.json')
+                fetch('scores/local_swap.json')
                     .then(response => response.json())
                     .then(data => {
                         if (data.overall_score !== undefined) {

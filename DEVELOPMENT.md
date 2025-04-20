@@ -5,7 +5,7 @@ rm intermediate_data/ge2025_polling_districts_fixed.kml
 rm intermediate_data/ge2025_polling_distrct_and_estimated_elector_size.json
 rm intermediate_data/ge2025_polling_districts_to_adjacent_districts.json
 rm processed_data/ge2025_polling_districts_with_information.geojson
-rm annotations/*.json
+rm scores/*.json
 source .venv/bin/activate
 black -l 200 .
 python3 scripts/fix_kml_boundaries.py
