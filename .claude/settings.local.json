@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*.svg)",
+      "Bash(*detailed.svg)",
+      "Bash(chmod:*)",
+      "Bash(find:*)",
+      "Bash(git log:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(non_contiguous_components_visualization.svg)",
+      "Bash(pip install:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(pytest:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(rm:*)",
+      "Bash(singapore_electoral_boundaries_fixed*.svg)",
+      "Bash(source:*)",
+      "Bash(time python:*)",
+      "Bash(uv --version)",
+      "Bash(uv config:*)",
+      "Bash(uv pip config:*)",
+      "Bash(uv pip install:*)",
+      "Bash(uv run:*)",
+      "Bash(uv venv:*)",
+      "Bash(uv:*)",
+      "WebFetchTool(domain:shapely.readthedocs.io)",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "mcp__puppeteer__puppeteer_hover"
+    ]
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "puppeteer"
+  ]
+}
