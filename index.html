@@ -244,10 +244,12 @@
     // This ensures smaller constituencies are rendered on top of larger ones
     map.createPane('defaultPane');
     map.createPane('smcPane'); // Single Member Constituencies pane
+    map.createPane('highlightPane'); // Special pane for highlighted features
     map.createPane('labelPane'); // Special pane for labels and tooltips
     map.createPane('popupPane'); // Special pane for popups to be above labels
     map.getPane('smcPane').style.zIndex = 650; // Higher than the default overlay pane (600)
     map.getPane('defaultPane').style.zIndex = 600; // Same as default overlay pane
+    map.getPane('highlightPane').style.zIndex = 2500; // High z-index for highlights
     map.getPane('labelPane').style.zIndex = 3000; // Very high z-index to ensure labels are on top of everything
     map.getPane('popupPane').style.zIndex = 4000; // Even higher z-index to ensure popups are above labels
     
@@ -331,6 +333,7 @@
     }
 
     let activeHighlight = null;
+    let activeHighlightLayer = null; // Store the actual highlight layer
     let pollingDistrictLayers = {};
     let pollingDistrictProperties = {};
     let selectedDistrictForLines = null;
@@ -338,6 +341,12 @@
 
     // --- Highlighting Logic ---
     function resetHighlightStyle(layer, defaultColor) {
+       // Remove any existing highlight layer
+       if (activeHighlightLayer) {
+           map.removeLayer(activeHighlightLayer);
+           activeHighlightLayer = null;
+       }
+       
        if (layer && typeof layer.setStyle === 'function') {
           // Check if this is a constituency boundary (blue) or polling district (red)
           const isConstituencyBoundary = defaultColor === '#0066FF';
@@ -374,10 +383,17 @@
           });
        }
     }
+    
     function highlightFeature(layer, defaultColor) {
         // First, clear any existing highlight
         if (activeHighlight && activeHighlight.layer !== layer) {
             resetHighlightStyle(activeHighlight.layer, activeHighlight.defaultColor);
+        }
+        
+        // Remove any existing highlight layer
+        if (activeHighlightLayer) {
+            map.removeLayer(activeHighlightLayer);
+            activeHighlightLayer = null;
         }
         
         // Check if this is a constituency boundary (blue) or polling district (red)
@@ -385,24 +401,19 @@
         // Use weight 6 for constituency boundaries, 4 for polling districts when highlighted
         const highlightWeight = isConstituencyBoundary ? 6 : 4;
         
-        // Apply highlight style to the entire layer
-        if (layer && typeof layer.setStyle === 'function') {
-            // For MultiPolygon or complex shapes, ensure the entire layer is highlighted
-            layer.setStyle({ 
-                weight: highlightWeight, 
-                color: '#FFA500', // Orange highlight color
-                fillOpacity: 0.2, 
-                opacity: 0.9,
-                // Ensure the entire layer is highlighted by setting a very high z-index
-                zIndex: 2000 // Increased from 1000 to ensure it's above all other elements
-            });
-            
-            // Bring the layer to the front to ensure it's visible
-            if (layer.bringToFront && typeof layer.bringToFront === 'function') {
-                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                    layer.bringToFront();
-                }
-            }
+        // Create a highlight layer by duplicating the geometry
+        if (layer && layer.feature) {
+            // Create a new GeoJSON layer with the same geometry but highlight style
+            activeHighlightLayer = L.geoJSON(layer.feature, {
+                style: {
+                    weight: highlightWeight,
+                    color: '#FFA500', // Orange highlight color
+                    fillOpacity: 0.2,
+                    opacity: 0.9
+                },
+                interactive: false, // Make it non-interactive so it doesn't interfere
+                pane: 'highlightPane' // Use the dedicated highlight pane
+            }).addTo(map);
         }
         
         // Store the active highlight for later reference
@@ -1439,6 +1450,11 @@
             resetHighlightStyle(activeHighlight.layer, activeHighlight.defaultColor);
             activeHighlight = null;
         }
+        // Remove highlight layer
+        if (activeHighlightLayer) {
+            map.removeLayer(activeHighlightLayer);
+            activeHighlightLayer = null;
+        }
         // Popups are automatically closed by Leaflet on map click, usually.
     });
 
@@ -1449,6 +1465,11 @@
                  if (activeHighlight) {
                     resetHighlightStyle(activeHighlight.layer, activeHighlight.defaultColor);
                     activeHighlight = null;
+                }
+                // Remove highlight layer
+                if (activeHighlightLayer) {
+                    map.removeLayer(activeHighlightLayer);
+                    activeHighlightLayer = null;
                 }
             }
         });
